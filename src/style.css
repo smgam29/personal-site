@@ -259,11 +259,16 @@ html[data-theme="light"] .sheet {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  border: var(--rule-poster) solid var(--rule);
+  border: 0;
   background: var(--paper);
   backdrop-filter: blur(var(--panel-blur)) saturate(1.05) brightness(1.02);
   -webkit-backdrop-filter: blur(var(--panel-blur)) saturate(1.05) brightness(1.02);
-  box-shadow: var(--edge-soft), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  /* Chalky soft edge instead of a hard 1px rule */
+  box-shadow:
+    var(--edge-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 0 1px var(--rule),
+    0 0 12px color-mix(in srgb, var(--ink) 8%, transparent);
   padding: var(--space-3) var(--space-4);
   margin-bottom: 0;
 }
@@ -370,17 +375,20 @@ html[data-theme="dark"] .theme-toggle__thumb {
 .cover {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.75fr);
-  border: var(--rule-poster) solid var(--rule);
-  border-top: none;
+  border: 0;
   background: var(--paper);
   backdrop-filter: blur(var(--panel-blur)) saturate(1.05) brightness(1.02);
   -webkit-backdrop-filter: blur(var(--panel-blur)) saturate(1.05) brightness(1.02);
-  box-shadow: var(--edge-soft);
+  box-shadow:
+    var(--edge-soft),
+    0 0 0 1px var(--rule),
+    0 0 14px color-mix(in srgb, var(--ink) 7%, transparent);
 }
 
 .cover__main {
   padding: clamp(1.35rem, 3.5vw, 2.5rem);
-  border-right: var(--rule-poster) solid var(--rule);
+  border-right: 0;
+  box-shadow: 1px 0 0 var(--rule), 4px 0 18px color-mix(in srgb, var(--ink) 5%, transparent);
   display: flex;
   flex-direction: column;
 }
@@ -530,10 +538,13 @@ html[data-theme="dark"] .theme-toggle__thumb {
 
 .hero__frame {
   position: relative;
-  border: var(--rule-poster) solid var(--rule);
+  border: 0;
   background: var(--chalk);
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(243, 239, 230, 0.04);
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 0 18px color-mix(in srgb, var(--ink) 10%, transparent),
+    inset 0 0 0 1px rgba(243, 239, 230, 0.04);
 }
 
 .hero__frame::after {
@@ -949,14 +960,16 @@ html[data-theme="light"] .hero__img--light {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  border: var(--rule-poster) solid var(--rule);
-  border-top: none;
+  border: 0;
   background: color-mix(in srgb, var(--void) 72%, transparent);
   backdrop-filter: blur(calc(var(--panel-blur) * 0.7)) saturate(1.05);
   -webkit-backdrop-filter: blur(calc(var(--panel-blur) * 0.7)) saturate(1.05);
   color: var(--ink);
   padding: var(--space-4) clamp(1.25rem, 3vw, 2rem);
-  box-shadow: var(--edge-soft);
+  box-shadow:
+    var(--edge-soft),
+    0 0 0 1px var(--rule),
+    0 0 14px color-mix(in srgb, var(--ink) 7%, transparent);
 }
 
 .footer__mark,
@@ -1137,7 +1150,7 @@ html[data-theme="light"] .hero__img--light {
 
   .cover__main {
     border-right: none;
-    border-bottom: var(--rule-poster) solid var(--rule);
+    box-shadow: 0 1px 0 var(--rule), 0 6px 18px color-mix(in srgb, var(--ink) 5%, transparent);
   }
 
   .cover__skills {
