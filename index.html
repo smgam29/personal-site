@@ -76,15 +76,15 @@
       <defs>
         <filter
           id="brand-wavy"
-          x="-8%"
-          y="-8%"
-          width="116%"
-          height="116%"
+          x="-12%"
+          y="-12%"
+          width="124%"
+          height="124%"
           color-interpolation-filters="sRGB"
         >
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.045 0.06"
+            baseFrequency="0.035 0.05"
             numOctaves="2"
             seed="7"
             result="noise"
@@ -92,10 +92,11 @@
           <feDisplacementMap
             in="SourceGraphic"
             in2="noise"
-            scale="1.8"
+            scale="2.6"
             xChannelSelector="R"
             yChannelSelector="G"
           />
+          <feGaussianBlur stdDeviation="0.35" />
         </filter>
       </defs>
     </svg>
