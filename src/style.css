@@ -408,6 +408,89 @@ html[data-theme="dark"] .theme-toggle__thumb {
   line-height: 1.45;
 }
 
+/* Throwback social badges — sit in leftover space under Spec · 02 */
+.throwbacks {
+  margin-top: auto;
+  padding-top: var(--space-5);
+  border-top: var(--rule-mid) solid var(--rule);
+}
+
+.throwbacks__label {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  font-weight: 700;
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.throwbacks__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.throwback {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.1rem;
+  padding: 0.3rem 0.65rem 0.3rem 0.4rem;
+  border: var(--rule-mid) solid var(--rule-strong);
+  background: var(--chalk);
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: background-color 140ms var(--ease-print), color 140ms var(--ease-print),
+    border-color 140ms var(--ease-print);
+}
+
+.throwback__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+}
+
+.throwback__name {
+  line-height: 1;
+}
+
+.throwback--myspace:hover,
+.throwback--myspace:focus-visible {
+  background: #1d3f8a;
+  border-color: #1d3f8a;
+  color: #f3efe6;
+}
+
+.throwback--tumblr {
+  color: var(--ink-muted);
+}
+
+.throwback--bebo {
+  color: var(--ink-muted);
+}
+
+.throwback--dead {
+  cursor: default;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.throwback--tumblr.throwback--dead {
+  border-color: color-mix(in srgb, #36465d 55%, var(--rule));
+}
+
+.throwback--bebo.throwback--dead {
+  border-color: color-mix(in srgb, #ee3e32 45%, var(--rule));
+}
+
 .brand {
   margin: 0;
   font-family: var(--font-display);
