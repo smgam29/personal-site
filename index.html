@@ -10,17 +10,61 @@
     />
     <script>
       (() => {
+        // Instant paint: cached sunrise/sunset, else London month table.
+        // main.js refines with local solar calc + optional Open-Meteo / geolocation.
+        const LONDON_MONTH = [
+          [480, 980],
+          [440, 1030],
+          [380, 1085],
+          [365, 1190],
+          [315, 1245],
+          [285, 1280],
+          [305, 1270],
+          [345, 1225],
+          [395, 1155],
+          [445, 1085],
+          [435, 980],
+          [485, 955],
+        ];
+        const fromTable = () => {
+          const now = new Date();
+          const [rise, set] = LONDON_MONTH[now.getMonth()];
+          const mins = now.getHours() * 60 + now.getMinutes();
+          return mins >= rise && mins < set ? "light" : "dark";
+        };
+        const fromCache = () => {
+          try {
+            const raw = localStorage.getItem("sg-sun-cache");
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            const d = new Date();
+            const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+            if (data?.day !== key) return null;
+            const now = Date.now();
+            if (typeof data.sunrise !== "number" || typeof data.sunset !== "number") {
+              return null;
+            }
+            return now >= data.sunrise && now < data.sunset ? "light" : "dark";
+          } catch {
+            return null;
+          }
+        };
+        const autoTheme = () => fromCache() || fromTable();
         try {
+          const pref = localStorage.getItem("sg-theme-pref");
           const saved = localStorage.getItem("sg-theme");
           const theme =
-            saved === "light" || saved === "dark"
+            pref === "manual" && (saved === "light" || saved === "dark")
               ? saved
-              : window.matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+              : autoTheme();
           document.documentElement.setAttribute("data-theme", theme);
+          document.documentElement.setAttribute(
+            "data-theme-pref",
+            pref === "manual" ? "manual" : "auto",
+          );
         } catch {
-          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute("data-theme", autoTheme());
+          document.documentElement.setAttribute("data-theme-pref", "auto");
         }
       })();
     </script>
@@ -28,11 +72,38 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
+    <svg class="filters" aria-hidden="true" focusable="false" width="0" height="0">
+      <defs>
+        <filter
+          id="brand-wavy"
+          x="-8%"
+          y="-8%"
+          width="116%"
+          height="116%"
+          color-interpolation-filters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.045 0.06"
+            numOctaves="2"
+            seed="7"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="1.8"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+    </svg>
+
     <a class="skip" href="#main">Skip to content</a>
 
     <div class="sheet" data-animate>
       <header class="topbar">
-        <p class="topbar__cycle">Build · Learn · Share · Repeat</p>
         <div class="stripes" aria-hidden="true">
           <span class="stripes__band stripes__band--blue"></span>
           <span class="stripes__band stripes__band--yellow"></span>
@@ -83,13 +154,11 @@
 
                 <a
                   class="hotspot hotspot--linkedin"
-                  href="https://www.linkedin.com/in/PLACEHOLDER-scott-gamble"
+                  href="https://www.linkedin.com/in/scottmgamble"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span class="hotspot__visually-hidden"
-                    >1 LinkedIn — placeholder URL</span
-                  >
+                  <span class="hotspot__visually-hidden">1 LinkedIn</span>
                 </a>
                 <a
                   class="hotspot hotspot--substack"
@@ -103,13 +172,11 @@
                 </a>
                 <a
                   class="hotspot hotspot--github"
-                  href="https://github.com/PLACEHOLDER-scott-gamble"
+                  href="https://github.com/smgam29/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span class="hotspot__visually-hidden"
-                    >3 GitHub — placeholder URL</span
-                  >
+                  <span class="hotspot__visually-hidden">3 GitHub</span>
                 </a>
               </div>
               <figcaption class="hero__cap">
@@ -121,7 +188,7 @@
           <aside class="cover__skills" aria-labelledby="skills-heading">
             <p class="skills__code">Spec · 02</p>
             <h2 id="skills-heading" class="skills__title">
-              What I’m working on
+              What I'm working on
             </h2>
             <ul class="skills__list">
               <li>
@@ -194,142 +261,110 @@
                 </div>
               </li>
             </ul>
+
+            <div class="throwbacks">
+              <ul class="throwbacks__list">
+                <li>
+                  <a
+                    class="throwback throwback--myspace"
+                    href="https://music.apple.com/gb/artist/harry-mowtown/1529834257"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      class="throwback__img throwback__img--dark"
+                      src="/social/myspace-dark.png"
+                      width="256"
+                      height="256"
+                      alt="MySpace — Harry Mowtown on Apple Music"
+                    />
+                    <img
+                      class="throwback__img throwback__img--light"
+                      src="/social/myspace-light.png"
+                      width="256"
+                      height="256"
+                      alt="MySpace — Harry Mowtown on Apple Music"
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="throwback throwback--tumblr"
+                    href="https://scottgamblor.substack.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      class="throwback__img throwback__img--dark"
+                      src="/social/tumblr-dark.png"
+                      width="256"
+                      height="256"
+                      alt="Tumblr — Substack"
+                    />
+                    <img
+                      class="throwback__img throwback__img--light"
+                      src="/social/tumblr-light.png"
+                      width="256"
+                      height="256"
+                      alt="Tumblr — Substack"
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="throwback throwback--bebo"
+                    href="https://www.linkedin.com/in/scottmgamble"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      class="throwback__img throwback__img--dark"
+                      src="/social/bebo-dark.png"
+                      width="256"
+                      height="256"
+                      alt="Bebo — LinkedIn"
+                    />
+                    <img
+                      class="throwback__img throwback__img--light"
+                      src="/social/bebo-light.png"
+                      width="256"
+                      height="256"
+                      alt="Bebo — LinkedIn"
+                    />
+                  </a>
+                </li>
+              </ul>
+            </div>
           </aside>
-        </section>
-
-        <section
-          id="destinations"
-          class="destinations"
-          aria-labelledby="dest-heading"
-        >
-          <div class="section-head">
-            <h2 id="dest-heading">Destinations</h2>
-            <p>
-              Same links as the desk callouts. Writing lives on Substack; this
-              page frames the rest.
-            </p>
-          </div>
-
-          <div class="panels">
-            <a
-              class="panel panel--red panel-tick"
-              href="https://github.com/PLACEHOLDER-scott-gamble"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span class="panel__num" aria-hidden="true">01</span>
-              <div class="panel__body">
-                <h3>GitHub</h3>
-                <p>Code, experiments, and public builds.</p>
-                <span class="panel__cta">View projects →</span>
-                <span class="panel__todo">Placeholder URL — confirm handle</span>
-              </div>
-            </a>
-
-            <a
-              class="panel panel--yellow panel-tick"
-              href="https://scottgamblor.substack.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span class="panel__num" aria-hidden="true">02</span>
-              <div class="panel__body">
-                <h3>Substack</h3>
-                <p>Essays, notes, and updates on AI adoption in the wild.</p>
-                <span class="panel__cta">Read writing →</span>
-                <span class="panel__todo">TODO-P1 — URL unverified</span>
-              </div>
-            </a>
-
-            <a
-              class="panel panel--blue panel-tick"
-              href="https://www.linkedin.com/in/PLACEHOLDER-scott-gamble"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span class="panel__num" aria-hidden="true">03</span>
-              <div class="panel__body">
-                <h3>LinkedIn</h3>
-                <p>Roles, programmes, and professional background.</p>
-                <span class="panel__cta">Connect →</span>
-                <span class="panel__todo">Placeholder URL — confirm profile</span>
-              </div>
-            </a>
-          </div>
-        </section>
-
-        <section class="credentials" aria-labelledby="cred-heading">
-          <div class="section-head">
-            <h2 id="cred-heading">Selected signal</h2>
-            <p>
-              Public roles only. Claims pending Scott’s confirmation before any
-              wider ship.
-            </p>
-          </div>
-          <ol class="cred-list">
-            <li>
-              <span class="cred-list__n">01</span>
-              <div>
-                <strong>Founding Adoption Strategist — ElevenLabs</strong>
-                <p>
-                  Building customer adoption and value at scale inside an
-                  AI-native product company.
-                </p>
-              </div>
-            </li>
-            <li>
-              <span class="cred-list__n">02</span>
-              <div>
-                <strong
-                  >Ex-ServiceNow — AI Strategy, Knowledge &amp; Content
-                  Systems</strong
-                >
-                <p>
-                  Senior manager; Now Assist enablement practice; SITS UK
-                  keynote on moving AI past pilot.
-                </p>
-              </div>
-            </li>
-            <li>
-              <span class="cred-list__n">03</span>
-              <div>
-                <strong>Earlier — IT operations &amp; service leadership</strong>
-                <p>
-                  Skanska, Sopra Steria, Southern Co-op, Affinion — operating
-                  systems that have to work.
-                </p>
-              </div>
-            </li>
-          </ol>
         </section>
       </main>
 
       <footer class="footer">
         <p class="footer__mark">Scott Gamble · scottgamble.co.uk</p>
-        <ul class="toggles" aria-label="Traits">
-          <li>
-            <span class="toggle toggle--on toggle--red" aria-hidden="true"></span>
-            Practical
-          </li>
-          <li>
-            <span
-              class="toggle toggle--on toggle--yellow"
-              aria-hidden="true"
-            ></span>
-            Hands-on
-          </li>
-          <li>
-            <span
-              class="toggle toggle--on toggle--blue"
-              aria-hidden="true"
-            ></span>
-            Anti-hype
-          </li>
-        </ul>
-        <p class="footer__reach">
-          <a href="mailto:scott@neonrocket.co.uk">scott@neonrocket.co.uk</a>
-        </p>
+        <div
+          class="stripes stripes--footer"
+          aria-hidden="true"
+          title="Registration stripes"
+        >
+          <span class="stripes__band stripes__band--red"></span>
+          <span class="stripes__band stripes__band--yellow"></span>
+          <span class="stripes__band stripes__band--blue"></span>
+        </div>
       </footer>
+
+      <div class="hit-counter">
+        <p class="hit-counter__label">You are visitor nº</p>
+        <button
+          type="button"
+          class="hit-counter__board"
+          id="hit-counter"
+          aria-live="polite"
+          aria-label="Visitor counter"
+          title="Click me"
+        >
+          <span class="hit-counter__digits" data-hit-digits>00000</span>
+        </button>
+      </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>
