@@ -464,8 +464,8 @@ html[data-theme="dark"] .theme-toggle__thumb {
   object-fit: contain;
 }
 
-html[data-theme="dark"] .throwback__img--dark,
-html[data-theme="light"] .throwback__img--light {
+html[data-theme="dark"] .throwback__img--light,
+html[data-theme="light"] .throwback__img--dark {
   display: block;
 }
 
