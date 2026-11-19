@@ -472,7 +472,6 @@ html[data-theme="dark"] .theme-toggle__thumb {
 
 .throwback--dead {
   cursor: default;
-  opacity: 0.72;
   pointer-events: none;
 }
 
