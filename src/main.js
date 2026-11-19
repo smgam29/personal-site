@@ -183,11 +183,6 @@ toggle?.addEventListener("click", () => {
   setManualTheme(next);
 });
 
-// Dead throwback links stay decorative until a destination exists
-document.querySelectorAll(".throwback--dead").forEach((link) => {
-  link.addEventListener("click", (event) => event.preventDefault());
-});
-
 toggle?.addEventListener("dblclick", (event) => {
   event.preventDefault();
   setAutoTheme();

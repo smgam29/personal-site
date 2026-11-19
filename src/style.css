@@ -462,25 +462,18 @@ html[data-theme="dark"] .theme-toggle__thumb {
   color: #f3efe6;
 }
 
-.throwback--tumblr {
-  color: var(--ink-muted);
+.throwback--tumblr:hover,
+.throwback--tumblr:focus-visible {
+  background: #36465d;
+  border-color: #36465d;
+  color: #f3efe6;
 }
 
-.throwback--bebo {
-  color: var(--ink-muted);
-}
-
-.throwback--dead {
-  cursor: default;
-  pointer-events: none;
-}
-
-.throwback--tumblr.throwback--dead {
-  border-color: color-mix(in srgb, #36465d 55%, var(--rule));
-}
-
-.throwback--bebo.throwback--dead {
-  border-color: color-mix(in srgb, #ee3e32 45%, var(--rule));
+.throwback--bebo:hover,
+.throwback--bebo:focus-visible {
+  background: #ee3e32;
+  border-color: #ee3e32;
+  color: #f3efe6;
 }
 
 .brand {
