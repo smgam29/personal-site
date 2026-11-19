@@ -10,17 +10,29 @@
     />
     <script>
       (() => {
+        // Light ~6:00–17:59 local; dark evenings/nights. Toggle can override.
+        const themeFromClock = () => {
+          const hour = new Date().getHours();
+          return hour >= 6 && hour < 18 ? "light" : "dark";
+        };
         try {
+          const pref = localStorage.getItem("sg-theme-pref");
           const saved = localStorage.getItem("sg-theme");
           const theme =
-            saved === "light" || saved === "dark"
+            pref === "manual" && (saved === "light" || saved === "dark")
               ? saved
-              : window.matchMedia("(prefers-color-scheme: light)").matches
-                ? "light"
-                : "dark";
+              : themeFromClock();
           document.documentElement.setAttribute("data-theme", theme);
+          document.documentElement.setAttribute(
+            "data-theme-pref",
+            pref === "manual" ? "manual" : "auto",
+          );
         } catch {
-          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute(
+            "data-theme",
+            themeFromClock(),
+          );
+          document.documentElement.setAttribute("data-theme-pref", "auto");
         }
       })();
     </script>

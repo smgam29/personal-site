@@ -272,7 +272,7 @@ html[data-theme="dark"] .theme-toggle__thumb {
 }
 
 .theme-toggle__label {
-  min-width: 2.75rem;
+  min-width: 6.5rem;
   text-align: left;
 }
 
