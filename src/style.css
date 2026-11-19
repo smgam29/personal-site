@@ -607,6 +607,84 @@ html[data-theme="light"] .hero__img--light {
   height: 11%;
 }
 
+/* Soft coffee steam — rises from the mug under the lamp */
+.steam {
+  position: absolute;
+  z-index: 1;
+  left: 59.2%;
+  top: 29%;
+  width: 6.2%;
+  height: 14%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.steam__wisp {
+  position: absolute;
+  bottom: 0;
+  width: 38%;
+  height: 70%;
+  border-radius: 50% 50% 45% 45%;
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    rgba(255, 252, 245, 0.32) 0%,
+    rgba(255, 252, 245, 0.1) 45%,
+    rgba(255, 252, 245, 0) 72%
+  );
+  filter: blur(1.75px);
+  opacity: 0;
+  transform-origin: 50% 100%;
+  animation: steam-rise 5.6s var(--ease-print) infinite;
+}
+
+html[data-theme="light"] .steam__wisp {
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0) 72%
+  );
+}
+
+.steam__wisp--a {
+  left: 18%;
+  animation-delay: 0s;
+}
+
+.steam__wisp--b {
+  left: 38%;
+  width: 32%;
+  height: 78%;
+  animation-delay: -1.9s;
+  animation-duration: 6.4s;
+}
+
+.steam__wisp--c {
+  left: 52%;
+  width: 28%;
+  height: 62%;
+  animation-delay: -3.4s;
+  animation-duration: 5.2s;
+}
+
+@keyframes steam-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12%, 0) scaleX(0.85) scaleY(0.7);
+  }
+  18% {
+    opacity: 0.38;
+  }
+  55% {
+    opacity: 0.18;
+    transform: translate3d(6%, -55%, 0) scaleX(1.05) scaleY(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-5%, -110%, 0) scaleX(1.15) scaleY(1.3);
+  }
+}
+
 .cta-row {
   display: flex;
   flex-wrap: wrap;
@@ -1105,6 +1183,11 @@ html[data-theme="light"] .hit-counter__board {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .steam__wisp {
+    animation: none;
+    opacity: 0;
   }
 }
 
