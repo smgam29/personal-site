@@ -1,8 +1,11 @@
 import { defineConfig } from "vite";
 
+// GitHub Actions sets CI=true → project Pages URL path.
+// Local preview keeps serving from /
+const base = process.env.CI ? "/personal-site/" : "/";
+
 export default defineConfig({
-  // Project Pages: https://smgam29.github.io/personal-site/
-  base: "/personal-site/",
+  base,
   server: {
     host: "127.0.0.1",
     port: 5173,
