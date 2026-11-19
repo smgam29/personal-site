@@ -434,13 +434,14 @@ html[data-theme="dark"] .theme-toggle__thumb {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: var(--space-3);
 }
 
 .throwback {
   display: block;
-  width: 3.35rem;
-  height: 3.35rem;
+  width: 3.85rem;
+  height: 3.85rem;
   text-decoration: none;
   transition: transform 140ms var(--ease-print), filter 140ms var(--ease-print);
 }
