@@ -15,27 +15,19 @@
 }
 
 @font-face {
-  font-family: 'M PLUS Rounded 1c';
+  font-family: 'Jost';
   font-style: normal;
   font-weight: 800;
   font-display: swap;
-  src: url(/fonts/mplusrounded1c-1b32b483.woff2) format('woff2');
+  src: url(/fonts/jost-35841fe7.woff2) format('woff2');
 }
 
 @font-face {
-  font-family: 'M PLUS Rounded 1c';
+  font-family: 'Jost';
   font-style: normal;
   font-weight: 900;
   font-display: swap;
-  src: url(/fonts/mplusrounded1c-886211ad.woff2) format('woff2');
-}
-
-@font-face {
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 900;
-  font-display: swap;
-  src: url(/fonts/nunito-1a8499c6.woff2) format('woff2');
+  src: url(/fonts/jost-35841fe7.woff2) format('woff2');
 }
 
 @font-face {
