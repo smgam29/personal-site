@@ -417,7 +417,7 @@ html[data-theme="dark"] .theme-toggle__thumb {
   line-height: 1.45;
 }
 
-/* Throwback social badges — sit in leftover space under Spec · 02 */
+/* Throwback social stickers — leftover space under Spec · 02 */
 .throwbacks {
   margin-top: auto;
   padding-top: var(--space-5);
@@ -433,56 +433,39 @@ html[data-theme="dark"] .theme-toggle__thumb {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .throwback {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  min-height: 2.1rem;
-  padding: 0.3rem 0.65rem 0.3rem 0.4rem;
-  border: var(--rule-mid) solid var(--rule-strong);
-  background: var(--chalk);
-  color: var(--ink);
+  display: block;
+  width: 3.35rem;
+  height: 3.35rem;
   text-decoration: none;
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  transition: background-color 140ms var(--ease-print), color 140ms var(--ease-print),
-    border-color 140ms var(--ease-print);
+  transition: transform 140ms var(--ease-print), filter 140ms var(--ease-print);
 }
 
-.throwback__icon {
-  width: 1.15rem;
-  height: 1.15rem;
-  flex-shrink: 0;
+.throwback:hover,
+.throwback:focus-visible {
+  transform: translateY(-2px) rotate(-1.5deg);
+  filter: brightness(1.05);
 }
 
-.throwback__name {
-  line-height: 1;
+.throwback:focus-visible {
+  outline: 1px solid var(--focus-ring);
+  outline-offset: 3px;
 }
 
-.throwback--myspace:hover,
-.throwback--myspace:focus-visible {
-  background: #1d3f8a;
-  border-color: #1d3f8a;
-  color: #f3efe6;
+.throwback__img {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.throwback--tumblr:hover,
-.throwback--tumblr:focus-visible {
-  background: #36465d;
-  border-color: #36465d;
-  color: #f3efe6;
-}
-
-.throwback--bebo:hover,
-.throwback--bebo:focus-visible {
-  background: #ee3e32;
-  border-color: #ee3e32;
-  color: #f3efe6;
+html[data-theme="dark"] .throwback__img--dark,
+html[data-theme="light"] .throwback__img--light {
+  display: block;
 }
 
 .brand {
