@@ -1,14 +1,24 @@
+import {
+  LONDON,
+  themeFromSun,
+  themeFromMonthTable,
+  computeSunTimes,
+  themeFromTimes,
+  writeSunCache,
+  writeSavedCoords,
+  readSavedCoords,
+  fetchSunFromApi,
+  requestCoords,
+  formatClock,
+} from "./sun.js";
+
 const sheet = document.querySelector("[data-animate]");
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const root = document.documentElement;
 const toggle = document.querySelector("#theme-toggle");
 const label = document.querySelector("[data-theme-label]");
 
-/** Local daylight window: light 06:00–17:59, dark otherwise. */
-const themeFromClock = () => {
-  const hour = new Date().getHours();
-  return hour >= 6 && hour < 18 ? "light" : "dark";
-};
+let sunMeta = { sunrise: null, sunset: null, source: "table" };
 
 const readPref = () => {
   try {
@@ -32,27 +42,46 @@ const readManualTheme = () => {
 const appliedTheme = () =>
   root.getAttribute("data-theme") === "light" ? "light" : "dark";
 
+const autoTheme = () => {
+  const result = themeFromSun(new Date());
+  sunMeta = {
+    sunrise: result.sunrise,
+    sunset: result.sunset,
+    source: result.source,
+  };
+  return result.theme;
+};
+
 const syncToggle = () => {
   const theme = appliedTheme();
   const pref = readPref();
+  const rise = formatClock(sunMeta.sunrise);
+  const set = formatClock(sunMeta.sunset);
+
   if (toggle) {
     toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
     toggle.setAttribute(
       "aria-label",
       pref === "auto"
-        ? `Theme follows local time (now ${theme}). Click to choose manually.`
+        ? `Theme follows sunrise/sunset (now ${theme}). Click to choose manually.`
         : theme === "dark"
           ? "Switch to light mode"
           : "Switch to dark mode",
     );
     toggle.title =
       pref === "auto"
-        ? "Auto · based on your local time (6:00–18:00 light)"
-        : "Manual theme · click to switch";
+        ? sunMeta.sunrise && sunMeta.sunset
+          ? `Auto · sunrise ${rise} · sunset ${set}`
+          : "Auto · based on local sunrise/sunset"
+        : "Manual theme · click to switch · double-click for auto";
   }
   if (label) {
     label.textContent =
-      pref === "auto" ? `Auto · ${theme === "dark" ? "Dark" : "Light"}` : theme === "dark" ? "Dark" : "Light";
+      pref === "auto"
+        ? `Auto · ${theme === "dark" ? "Dark" : "Light"}`
+        : theme === "dark"
+          ? "Dark"
+          : "Light";
   }
 };
 
@@ -79,15 +108,73 @@ const setAutoTheme = () => {
   } catch {
     /* ignore */
   }
-  applyTheme(themeFromClock(), "auto");
+  applyTheme(autoTheme(), "auto");
 };
 
 const resolveTheme = () => {
   if (readPref() === "manual") {
     const saved = readManualTheme();
-    applyTheme(saved || themeFromClock(), "manual");
+    applyTheme(saved || autoTheme() || themeFromMonthTable(), "manual");
   } else {
-    applyTheme(themeFromClock(), "auto");
+    applyTheme(autoTheme(), "auto");
+  }
+};
+
+const adoptSunTimes = (sunrise, sunset, lat, lon, source) => {
+  if (!sunrise || !sunset) return;
+  writeSunCache(sunrise, sunset, lat, lon);
+  sunMeta = { sunrise, sunset, source };
+  if (readPref() !== "auto") {
+    syncToggle();
+    return;
+  }
+  const next = themeFromTimes(new Date(), sunrise, sunset);
+  if (next && next !== appliedTheme()) applyTheme(next, "auto");
+  else syncToggle();
+};
+
+const refineSunTimes = async () => {
+  const saved = readSavedCoords();
+  let coords = saved || LONDON;
+
+  // Prefer a precise local calc immediately
+  {
+    const { sunrise, sunset } = computeSunTimes(new Date(), coords.lat, coords.lon);
+    if (sunrise && sunset) {
+      adoptSunTimes(sunrise, sunset, coords.lat, coords.lon, "calc");
+    }
+  }
+
+  // Soften with Open-Meteo when online (same coords)
+  try {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 3500);
+    const api = await fetchSunFromApi(coords.lat, coords.lon, controller.signal);
+    window.clearTimeout(timer);
+    adoptSunTimes(api.sunrise, api.sunset, coords.lat, coords.lon, "api");
+  } catch {
+    /* offline / blocked — calc is enough */
+  }
+
+  // Optional geolocation refinement (no prompt pressure if denied)
+  const geo = await requestCoords();
+  if (!geo) return;
+  writeSavedCoords(geo.lat, geo.lon);
+  coords = geo;
+
+  const local = computeSunTimes(new Date(), geo.lat, geo.lon);
+  if (local.sunrise && local.sunset) {
+    adoptSunTimes(local.sunrise, local.sunset, geo.lat, geo.lon, "geo-calc");
+  }
+
+  try {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 3500);
+    const api = await fetchSunFromApi(geo.lat, geo.lon, controller.signal);
+    window.clearTimeout(timer);
+    adoptSunTimes(api.sunrise, api.sunset, geo.lat, geo.lon, "geo-api");
+  } catch {
+    /* ignore */
   }
 };
 
@@ -96,18 +183,17 @@ toggle?.addEventListener("click", () => {
   setManualTheme(next);
 });
 
-// Double-click returns to clock-based auto
 toggle?.addEventListener("dblclick", (event) => {
   event.preventDefault();
   setAutoTheme();
 });
 
 resolveTheme();
+void refineSunTimes();
 
-// Keep auto mode in sync if the page stays open across dawn/dusk
 window.setInterval(() => {
   if (readPref() !== "auto") return;
-  const next = themeFromClock();
+  const next = autoTheme();
   if (next !== appliedTheme()) applyTheme(next, "auto");
 }, 60_000);
 

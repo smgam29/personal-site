@@ -10,28 +10,60 @@
     />
     <script>
       (() => {
-        // Light ~6:00–17:59 local; dark evenings/nights. Toggle can override.
-        const themeFromClock = () => {
-          const hour = new Date().getHours();
-          return hour >= 6 && hour < 18 ? "light" : "dark";
+        // Instant paint: cached sunrise/sunset, else London month table.
+        // main.js refines with local solar calc + optional Open-Meteo / geolocation.
+        const LONDON_MONTH = [
+          [480, 980],
+          [440, 1030],
+          [380, 1085],
+          [365, 1190],
+          [315, 1245],
+          [285, 1280],
+          [305, 1270],
+          [345, 1225],
+          [395, 1155],
+          [445, 1085],
+          [435, 980],
+          [485, 955],
+        ];
+        const fromTable = () => {
+          const now = new Date();
+          const [rise, set] = LONDON_MONTH[now.getMonth()];
+          const mins = now.getHours() * 60 + now.getMinutes();
+          return mins >= rise && mins < set ? "light" : "dark";
         };
+        const fromCache = () => {
+          try {
+            const raw = localStorage.getItem("sg-sun-cache");
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            const d = new Date();
+            const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+            if (data?.day !== key) return null;
+            const now = Date.now();
+            if (typeof data.sunrise !== "number" || typeof data.sunset !== "number") {
+              return null;
+            }
+            return now >= data.sunrise && now < data.sunset ? "light" : "dark";
+          } catch {
+            return null;
+          }
+        };
+        const autoTheme = () => fromCache() || fromTable();
         try {
           const pref = localStorage.getItem("sg-theme-pref");
           const saved = localStorage.getItem("sg-theme");
           const theme =
             pref === "manual" && (saved === "light" || saved === "dark")
               ? saved
-              : themeFromClock();
+              : autoTheme();
           document.documentElement.setAttribute("data-theme", theme);
           document.documentElement.setAttribute(
             "data-theme-pref",
             pref === "manual" ? "manual" : "auto",
           );
         } catch {
-          document.documentElement.setAttribute(
-            "data-theme",
-            themeFromClock(),
-          );
+          document.documentElement.setAttribute("data-theme", autoTheme());
           document.documentElement.setAttribute("data-theme-pref", "auto");
         }
       })();
