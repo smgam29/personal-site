@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +8,22 @@
       name="description"
       content="Scott Gamble — AI adoption into production. Founding Adoption Strategist at ElevenLabs; formerly ServiceNow AI strategy & knowledge systems."
     />
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem("sg-theme");
+          const theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : window.matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="/src/fonts.css" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
@@ -22,18 +38,86 @@
           <span class="stripes__band stripes__band--yellow"></span>
           <span class="stripes__band stripes__band--red"></span>
         </div>
-        <p class="topbar__domain">scottgamble.co.uk · Cat. 2026</p>
+        <div class="topbar__end">
+          <p class="topbar__domain">scottgamble.co.uk · Cat. 2026</p>
+          <button
+            type="button"
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-pressed="true"
+            aria-label="Switch to light mode"
+          >
+            <span class="theme-toggle__track" aria-hidden="true">
+              <span class="theme-toggle__thumb"></span>
+            </span>
+            <span class="theme-toggle__label" data-theme-label>Dark</span>
+          </button>
+        </div>
       </header>
 
       <main id="main">
         <section class="cover" aria-labelledby="brand">
-          <div class="cover__copy">
+          <div class="cover__main">
             <h1 id="brand" class="brand">
               <span class="brand__line">Scott</span>
               <span class="brand__line">Gamble</span>
             </h1>
             <p class="role">AI adoption · Strategy that ships</p>
             <hr class="rule rule--draw" />
+
+            <figure class="hero plate-settle">
+              <div class="hero__frame">
+                <img
+                  class="hero__img hero__img--dark"
+                  src="/hero/desk-dark.jpg"
+                  width="1760"
+                  height="1176"
+                  alt="Illustrated desk scene: Scott at a laptop with LinkedIn, Substack, and GitHub callouts."
+                />
+                <img
+                  class="hero__img hero__img--light"
+                  src="/hero/desk-light.jpg"
+                  width="1760"
+                  height="1176"
+                  alt="Illustrated desk scene on cream paper: Scott at a laptop with LinkedIn, Substack, and GitHub callouts."
+                />
+
+                <a
+                  class="hotspot hotspot--linkedin"
+                  href="https://www.linkedin.com/in/PLACEHOLDER-scott-gamble"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="hotspot__visually-hidden"
+                    >1 LinkedIn — placeholder URL</span
+                  >
+                </a>
+                <a
+                  class="hotspot hotspot--substack"
+                  href="https://scottgamblor.substack.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="hotspot__visually-hidden"
+                    >2 Substack — URL unverified</span
+                  >
+                </a>
+                <a
+                  class="hotspot hotspot--github"
+                  href="https://github.com/PLACEHOLDER-scott-gamble"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="hotspot__visually-hidden"
+                    >3 GitHub — placeholder URL</span
+                  >
+                </a>
+              </div>
+              <figcaption class="hero__cap">
+                Fig. 01 — Field desk · annotated destinations
+              </figcaption>
+            </figure>
+
             <p class="lede">
               Helping teams move AI work from pilot theatre into sustained
               production value — hands-on with agents, LLMs, and the operating
@@ -45,35 +129,58 @@
             </p>
             <div class="cta-row">
               <a class="btn btn--ink" href="#destinations">Open destinations</a>
-              <a
-                class="btn btn--outline"
-                href="mailto:scott@neonrocket.co.uk"
+              <a class="btn btn--outline" href="mailto:scott@neonrocket.co.uk"
                 >Request a conversation</a
               >
             </div>
           </div>
 
-          <aside class="cover__plate plate-settle" aria-label="Registration plate">
-            <div class="plate">
-              <div class="plate__stripes" aria-hidden="true"></div>
-              <div class="plate__body">
-                <p class="plate__code">Fig. 01</p>
-                <p class="plate__title">Field catalogue of practice</p>
-                <ul class="plate__specs">
-                  <li><span>01</span> Enterprise AI enablement</li>
-                  <li><span>02</span> AI-native product adoption</li>
-                  <li><span>03</span> Knowledge systems that stick</li>
-                </ul>
-                <p class="plate__note">Proof over posture · No buzzword stack</p>
-              </div>
-            </div>
+          <aside class="cover__skills" aria-labelledby="skills-heading">
+            <p class="skills__code">Spec · 02</p>
+            <h2 id="skills-heading" class="skills__title">
+              Skills &amp; experience
+            </h2>
+            <p class="skills__note">
+              Placeholder — Scott will supply the skills &amp; experience copy
+              next.
+            </p>
+            <ul class="skills__list">
+              <li>
+                <span>01</span>
+                <div>
+                  <strong>Awaiting copy</strong>
+                  <p>Skills line item — TBD</p>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <strong>Awaiting copy</strong>
+                  <p>Experience line item — TBD</p>
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <strong>Awaiting copy</strong>
+                  <p>Proof / programme line item — TBD</p>
+                </div>
+              </li>
+            </ul>
           </aside>
         </section>
 
-        <section id="destinations" class="destinations" aria-labelledby="dest-heading">
+        <section
+          id="destinations"
+          class="destinations"
+          aria-labelledby="dest-heading"
+        >
           <div class="section-head">
             <h2 id="dest-heading">Destinations</h2>
-            <p>Three places to go next. Writing lives on Substack; this page frames the rest.</p>
+            <p>
+              Same links as the desk callouts. Writing lives on Substack; this
+              page frames the rest.
+            </p>
           </div>
 
           <div class="panels">
@@ -127,28 +234,43 @@
         <section class="credentials" aria-labelledby="cred-heading">
           <div class="section-head">
             <h2 id="cred-heading">Selected signal</h2>
-            <p>Public roles only. Claims pending Scott’s confirmation before any wider ship.</p>
+            <p>
+              Public roles only. Claims pending Scott’s confirmation before any
+              wider ship.
+            </p>
           </div>
           <ol class="cred-list">
             <li>
               <span class="cred-list__n">01</span>
               <div>
                 <strong>Founding Adoption Strategist — ElevenLabs</strong>
-                <p>Building customer adoption and value at scale inside an AI-native product company.</p>
+                <p>
+                  Building customer adoption and value at scale inside an
+                  AI-native product company.
+                </p>
               </div>
             </li>
             <li>
               <span class="cred-list__n">02</span>
               <div>
-                <strong>Ex-ServiceNow — AI Strategy, Knowledge &amp; Content Systems</strong>
-                <p>Senior manager; Now Assist enablement practice; SITS UK keynote on moving AI past pilot.</p>
+                <strong
+                  >Ex-ServiceNow — AI Strategy, Knowledge &amp; Content
+                  Systems</strong
+                >
+                <p>
+                  Senior manager; Now Assist enablement practice; SITS UK
+                  keynote on moving AI past pilot.
+                </p>
               </div>
             </li>
             <li>
               <span class="cred-list__n">03</span>
               <div>
                 <strong>Earlier — IT operations &amp; service leadership</strong>
-                <p>Skanska, Sopra Steria, Southern Co-op, Affinion — operating systems that have to work.</p>
+                <p>
+                  Skanska, Sopra Steria, Southern Co-op, Affinion — operating
+                  systems that have to work.
+                </p>
               </div>
             </li>
           </ol>
@@ -163,11 +285,17 @@
             Practical
           </li>
           <li>
-            <span class="toggle toggle--on toggle--yellow" aria-hidden="true"></span>
+            <span
+              class="toggle toggle--on toggle--yellow"
+              aria-hidden="true"
+            ></span>
             Hands-on
           </li>
           <li>
-            <span class="toggle toggle--on toggle--blue" aria-hidden="true"></span>
+            <span
+              class="toggle toggle--on toggle--blue"
+              aria-hidden="true"
+            ></span>
             Anti-hype
           </li>
         </ul>
