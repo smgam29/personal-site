@@ -15,6 +15,22 @@
 }
 
 @font-face {
+  font-family: 'Gluten';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/fonts/gluten-b685d174.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Gluten';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(/fonts/gluten-b685d174.woff2) format('woff2');
+}
+
+@font-face {
   font-family: 'Zilla Slab';
   font-style: italic;
   font-weight: 400;
