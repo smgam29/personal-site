@@ -241,17 +241,14 @@ if (hitState.clicks > 10 || hitState.value === 0) {
 renderHits(hitState.value);
 
 hitBoard?.addEventListener("click", () => {
-  if (hitState.value === 0) {
-    // Recover from the joke tripwire with a fresh tally.
-    hitState = { value: randomHitStart(), clicks: 1 };
+  // Stay broken at 00000 until refresh remints.
+  if (hitState.value === 0 || hitState.clicks > 10) return;
+
+  const nextClicks = hitState.clicks + 1;
+  if (nextClicks > 10) {
+    hitState = { value: 0, clicks: nextClicks };
   } else {
-    const nextClicks = hitState.clicks + 1;
-    if (nextClicks > 10) {
-      // Joke tripwire: flash 00000; next click or refresh remints.
-      hitState = { value: 0, clicks: 0 };
-    } else {
-      hitState = { value: hitState.value + 1, clicks: nextClicks };
-    }
+    hitState = { value: hitState.value + 1, clicks: nextClicks };
   }
   writeHitState(hitState.value, hitState.clicks);
   renderHits(hitState.value);
