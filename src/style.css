@@ -625,7 +625,12 @@ body::before {
 }
 
 /* —— Motion —— */
+/* Visible by default; motion only when .is-animating is set before paint */
 .rule--draw {
+  transform: scaleX(1);
+}
+
+.is-animating .rule--draw {
   transform: scaleX(0);
 }
 
@@ -634,6 +639,11 @@ body::before {
 }
 
 .plate-settle {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.is-animating .plate-settle {
   opacity: 0;
   transform: translateY(10px);
 }
@@ -643,6 +653,11 @@ body::before {
 }
 
 .panel-tick .panel__num {
+  opacity: 0.95;
+  transform: scale(1);
+}
+
+.is-animating .panel-tick .panel__num {
   opacity: 0;
   transform: scale(0.92);
 }
