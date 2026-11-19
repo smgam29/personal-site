@@ -450,6 +450,7 @@ html[data-theme="dark"] .theme-toggle__thumb {
   display: block;
   width: 3.85rem;
   height: 3.85rem;
+  flex: 0 0 3.85rem;
   text-decoration: none;
   transition: transform 140ms var(--ease-print), filter 140ms var(--ease-print);
 }
