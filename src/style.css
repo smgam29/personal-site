@@ -40,7 +40,7 @@
 
 :root {
   /* 70s ad-spread: fat soft display + slab body */
-  --font-display: "Gluten", "Bowlby One", "Cooper Black", "Arial Black", sans-serif;
+  --font-display: "M PLUS Rounded 1c", "Nunito", "Arial Rounded MT Bold", sans-serif;
   --font-section: "Alfa Slab One", "Rockwell", "Courier New", serif;
   --font-body: "Zilla Slab", "Rockwell", Georgia, serif;
   --font-meta: "Zilla Slab", Georgia, serif;
