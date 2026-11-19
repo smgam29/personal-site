@@ -227,14 +227,32 @@ const renderHits = (value) => {
   }
 };
 
+const mintHitState = () => {
+  const start = randomHitStart();
+  writeHitState(start, 0);
+  return { value: start, clicks: 0 };
+};
+
 let hitState = readHitState();
-if (hitState.clicks > 10) hitState = { value: 0, clicks: hitState.clicks };
+// Easter egg already fired (or someone is sitting on 00000) — mint a fresh tally.
+if (hitState.clicks > 10 || hitState.value === 0) {
+  hitState = mintHitState();
+}
 renderHits(hitState.value);
 
 hitBoard?.addEventListener("click", () => {
-  const nextClicks = hitState.clicks + 1;
-  const nextValue = nextClicks > 10 ? 0 : hitState.value + 1;
-  hitState = { value: nextValue, clicks: nextClicks };
+  if (hitState.value === 0) {
+    // Recover from the joke tripwire with a fresh tally.
+    hitState = { value: randomHitStart(), clicks: 1 };
+  } else {
+    const nextClicks = hitState.clicks + 1;
+    if (nextClicks > 10) {
+      // Joke tripwire: flash 00000; next click or refresh remints.
+      hitState = { value: 0, clicks: 0 };
+    } else {
+      hitState = { value: hitState.value + 1, clicks: nextClicks };
+    }
+  }
   writeHitState(hitState.value, hitState.clicks);
   renderHits(hitState.value);
 });
