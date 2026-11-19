@@ -585,7 +585,7 @@ html[data-theme="light"] .hero__img--light {
   border: 0;
 }
 
-/* Hit areas hug the painted callout labels on the desk plate */
+/* Hit areas hug the painted callout labels on the desk plate (dark art) */
 .hotspot--linkedin {
   left: 12.8%;
   top: 7.6%;
@@ -607,7 +607,29 @@ html[data-theme="light"] .hero__img--light {
   height: 11%;
 }
 
-/* Soft coffee steam — rises from the mug under the lamp */
+/* Light desk-light-v2.jpg callout positions (1 top-left, 2 top-right, 3 lower-left) */
+html[data-theme="light"] .hotspot--linkedin {
+  left: 12.4%;
+  top: 7.4%;
+  width: 20.7%;
+  height: 9.6%;
+}
+
+html[data-theme="light"] .hotspot--substack {
+  left: 68.7%;
+  top: 7.3%;
+  width: 22.7%;
+  height: 9.7%;
+}
+
+html[data-theme="light"] .hotspot--github {
+  left: 8.7%;
+  top: 63.7%;
+  width: 14.4%;
+  height: 14.8%;
+}
+
+/* Soft coffee steam — rises from the mug under the lamp (dark art) */
 .steam {
   position: absolute;
   z-index: 1;
@@ -617,6 +639,14 @@ html[data-theme="light"] .hero__img--light {
   height: 14%;
   pointer-events: none;
   overflow: visible;
+}
+
+/* Light art: mug sits further right beside the notebook */
+html[data-theme="light"] .steam {
+  left: 64.5%;
+  top: 30%;
+  width: 5.8%;
+  height: 13%;
 }
 
 .steam__wisp {
