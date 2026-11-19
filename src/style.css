@@ -474,13 +474,18 @@ html[data-theme="light"] .hero__img--light {
   border-radius: 0;
   background: transparent;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .hotspot:hover,
 .hotspot:focus-visible {
-  outline: 2px solid var(--hotspot-ring);
-  outline-offset: 2px;
-  background: color-mix(in srgb, var(--yellow) 18%, transparent);
+  outline: none;
+  background: transparent;
+}
+
+.hotspot:focus-visible {
+  outline: 1px solid var(--hotspot-ring);
+  outline-offset: 3px;
 }
 
 .hotspot__visually-hidden {
@@ -495,26 +500,26 @@ html[data-theme="light"] .hero__img--light {
   border: 0;
 }
 
-/* Annotation hit areas — tuned to Fig. 01 desk plate (3520×2352) */
+/* Hit areas hug the painted callout labels on the desk plate */
 .hotspot--linkedin {
-  left: 3.5%;
-  top: 6%;
-  width: 22%;
-  height: 12%;
+  left: 12.8%;
+  top: 7.6%;
+  width: 15.5%;
+  height: 10.5%;
 }
 
 .hotspot--substack {
-  right: 3.5%;
-  top: 5%;
-  width: 22%;
-  height: 12%;
+  left: 74.5%;
+  top: 7.5%;
+  width: 16.5%;
+  height: 10.5%;
 }
 
 .hotspot--github {
-  left: 3.5%;
-  bottom: 8%;
-  width: 20%;
-  height: 12%;
+  left: 8.8%;
+  top: 63.5%;
+  width: 11.5%;
+  height: 11%;
 }
 
 .cta-row {
