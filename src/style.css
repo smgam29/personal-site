@@ -92,10 +92,18 @@
 
 html {
   color-scheme: dark;
+  /* Global site scale — 80% of the previous composition */
+  zoom: 0.8;
 }
 
 html[data-theme="light"] {
   color-scheme: light;
+}
+
+@supports not (zoom: 1) {
+  html {
+    font-size: 80%;
+  }
 }
 
 body {
