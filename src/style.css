@@ -415,16 +415,6 @@ html[data-theme="dark"] .theme-toggle__thumb {
   border-top: var(--rule-mid) solid var(--rule);
 }
 
-.throwbacks__label {
-  margin: 0 0 var(--space-3);
-  font-family: var(--font-meta);
-  font-size: var(--text-meta);
-  font-weight: 700;
-  letter-spacing: var(--tracking-meta);
-  text-transform: uppercase;
-  color: var(--ink-muted);
-}
-
 .throwbacks__list {
   margin: 0;
   padding: 0;
