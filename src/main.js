@@ -178,6 +178,67 @@ const refineSunTimes = async () => {
   }
 };
 
+const HIT_VALUE_KEY = "sg-hit-value";
+const HIT_CLICKS_KEY = "sg-hit-clicks";
+const hitBoard = document.querySelector("#hit-counter");
+const hitDigits = document.querySelector("[data-hit-digits]");
+
+const formatHits = (n) => String(Math.max(0, Math.min(99999, n))).padStart(5, "0");
+
+const randomHitStart = () => 10001 + Math.floor(Math.random() * (99999 - 10001 + 1));
+
+const readHitState = () => {
+  try {
+    const rawValue = localStorage.getItem(HIT_VALUE_KEY);
+    const rawClicks = localStorage.getItem(HIT_CLICKS_KEY);
+    const value = rawValue == null ? null : Number(rawValue);
+    const clicks = rawClicks == null ? 0 : Number(rawClicks);
+    if (value == null || Number.isNaN(value)) {
+      const start = randomHitStart();
+      localStorage.setItem(HIT_VALUE_KEY, String(start));
+      localStorage.setItem(HIT_CLICKS_KEY, "0");
+      return { value: start, clicks: 0 };
+    }
+    return {
+      value,
+      clicks: Number.isNaN(clicks) ? 0 : clicks,
+    };
+  } catch {
+    return { value: randomHitStart(), clicks: 0 };
+  }
+};
+
+const writeHitState = (value, clicks) => {
+  try {
+    localStorage.setItem(HIT_VALUE_KEY, String(value));
+    localStorage.setItem(HIT_CLICKS_KEY, String(clicks));
+  } catch {
+    /* ignore */
+  }
+};
+
+const renderHits = (value) => {
+  if (hitDigits) hitDigits.textContent = formatHits(value);
+  if (hitBoard) {
+    hitBoard.setAttribute(
+      "aria-label",
+      `Visitor counter showing ${formatHits(value)}. Click to increment.`,
+    );
+  }
+};
+
+let hitState = readHitState();
+if (hitState.clicks > 10) hitState = { value: 0, clicks: hitState.clicks };
+renderHits(hitState.value);
+
+hitBoard?.addEventListener("click", () => {
+  const nextClicks = hitState.clicks + 1;
+  const nextValue = nextClicks > 10 ? 0 : hitState.value + 1;
+  hitState = { value: nextValue, clicks: nextClicks };
+  writeHitState(hitState.value, hitState.clicks);
+  renderHits(hitState.value);
+});
+
 toggle?.addEventListener("click", () => {
   const next = appliedTheme() === "light" ? "dark" : "light";
   setManualTheme(next);
