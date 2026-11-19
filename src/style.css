@@ -412,7 +412,10 @@ html[data-theme="dark"] .theme-toggle__thumb {
 .throwbacks {
   margin-top: auto;
   padding-top: var(--space-5);
-  border-top: var(--rule-mid) solid var(--rule);
+}
+
+.skills__list li:last-child {
+  border-bottom: none;
 }
 
 .throwbacks__list {
