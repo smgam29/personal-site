@@ -641,12 +641,12 @@ html[data-theme="light"] .hotspot--github {
   overflow: visible;
 }
 
-/* Light art: mug sits further right beside the notebook */
+/* Light art (desk-light-v2): coffee opening centre ~67.5%, rim ~40.5% */
 html[data-theme="light"] .steam {
-  left: 64.5%;
-  top: 30%;
+  left: 64.6%;
+  top: 24.5%;
   width: 5.8%;
-  height: 13%;
+  height: 16%;
 }
 
 .steam__wisp {
@@ -667,13 +667,16 @@ html[data-theme="light"] .steam {
   animation: steam-rise 5.6s var(--ease-print) infinite;
 }
 
+/* ~1.3× opacity / size vs prior light wisps; dark rules untouched */
 html[data-theme="light"] .steam__wisp {
   background: radial-gradient(
     ellipse at 50% 80%,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.12) 45%,
-    rgba(255, 255, 255, 0) 72%
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(255, 255, 255, 0.28) 40%,
+    rgba(255, 255, 255, 0) 70%
   );
+  filter: blur(2.6px);
+  animation-name: steam-rise-light;
 }
 
 .steam__wisp--a {
@@ -697,6 +700,23 @@ html[data-theme="light"] .steam__wisp {
   animation-duration: 5.2s;
 }
 
+html[data-theme="light"] .steam__wisp--a {
+  left: 30%;
+  width: 42%;
+}
+
+html[data-theme="light"] .steam__wisp--b {
+  left: 44%;
+  width: 36%;
+  height: 82%;
+}
+
+html[data-theme="light"] .steam__wisp--c {
+  left: 52%;
+  width: 34%;
+  height: 70%;
+}
+
 @keyframes steam-rise {
   0% {
     opacity: 0;
@@ -712,6 +732,25 @@ html[data-theme="light"] .steam__wisp {
   100% {
     opacity: 0;
     transform: translate3d(-5%, -110%, 0) scaleX(1.15) scaleY(1.3);
+  }
+}
+
+/* Light-only: ~1.3× peak/mid opacity vs prior light (dark steam-rise unchanged) */
+@keyframes steam-rise-light {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12%, 0) scaleX(0.9) scaleY(0.75);
+  }
+  18% {
+    opacity: 0.7;
+  }
+  55% {
+    opacity: 0.36;
+    transform: translate3d(4%, -55%, 0) scaleX(1.1) scaleY(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-3%, -110%, 0) scaleX(1.2) scaleY(1.35);
   }
 }
 
