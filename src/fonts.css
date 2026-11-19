@@ -31,6 +31,14 @@
 }
 
 @font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(/fonts/nunito-1a8499c6.woff2) format('woff2');
+}
+
+@font-face {
   font-family: 'Zilla Slab';
   font-style: italic;
   font-weight: 400;
