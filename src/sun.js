@@ -195,6 +195,14 @@ export const formatClock = (date) => {
 /**
  * Optional Open-Meteo check (no key, CORS-friendly). Falls back silently.
  */
+/** Parse Open-Meteo daily ISO wall-clock using the response utc offset. */
+const parseApiLocal = (iso, offsetSeconds) => {
+  const [date, time = "00:00"] = String(iso).split("T");
+  const [y, m, d] = date.split("-").map(Number);
+  const [hh, mm = 0, ss = 0] = time.split(":").map(Number);
+  return new Date(Date.UTC(y, m - 1, d, hh, mm, ss) - offsetSeconds * 1000);
+};
+
 export const fetchSunFromApi = async (lat, lon, signal) => {
   const url = new URL("https://api.open-meteo.com/v1/forecast");
   url.searchParams.set("latitude", String(lat));
@@ -209,18 +217,32 @@ export const fetchSunFromApi = async (lat, lon, signal) => {
   const rise = json?.daily?.sunrise?.[0];
   const set = json?.daily?.sunset?.[0];
   if (!rise || !set) throw new Error("sun api missing times");
-  return { sunrise: new Date(rise), sunset: new Date(set) };
+  const offset = Number(json.utc_offset_seconds) || 0;
+  return {
+    sunrise: parseApiLocal(rise, offset),
+    sunset: parseApiLocal(set, offset),
+  };
 };
 
-export const requestCoords = () =>
-  new Promise((resolve) => {
-    if (!navigator.geolocation) {
-      resolve(null);
-      return;
+/** Only use geolocation when permission is already granted (no prompt). */
+export const requestCoords = async () => {
+  try {
+    if (!navigator.geolocation) return null;
+    if (navigator.permissions?.query) {
+      const status = await navigator.permissions.query({ name: "geolocation" });
+      if (status.state !== "granted") return null;
+    } else {
+      return null;
     }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-      () => resolve(null),
-      { enableHighAccuracy: false, maximumAge: 86_400_000, timeout: 4_000 },
-    );
-  });
+    return await new Promise((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) =>
+          resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+        () => resolve(null),
+        { enableHighAccuracy: false, maximumAge: 86_400_000, timeout: 2_000 },
+      );
+    });
+  } catch {
+    return null;
+  }
+};
